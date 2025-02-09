@@ -27,15 +27,20 @@ WORKDIR /var/www/html
 # Copiar arquivos do projeto
 COPY . .
 
-# Criar e copiar o arquivo .env
-RUN cp .env.example .env
+# Criar diretórios caso não existam
+RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
 
-# Definir permissões corretas
+# Alterar dono dos arquivos para evitar problemas de permissão
+RUN chown -R laraveluser:laraveluser /var/www/html
+
+# Definir permissões corretamente
 RUN chmod -R 775 storage bootstrap/cache
-RUN chown -R laraveluser:laraveluser storage bootstrap/cache
 
 # Mudar para o usuário sem privilégios
 USER laraveluser
+
+# Criar o arquivo .env caso não exista
+RUN cp .env.example .env
 
 # Gerar chave da aplicação
 RUN php artisan key:generate
@@ -52,7 +57,7 @@ RUN chown -R www-data:www-data /var/www/html
 # Expor a porta padrão do Apache
 EXPOSE 80
 
-# Copiar o script de entrada para executar as Seeders
+# Copiar o script de entrada para executar migrações e seeders
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
