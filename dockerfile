@@ -21,27 +21,27 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN groupadd -g 1000 laraveluser && \
     useradd -u 1000 -g laraveluser -m laraveluser
 
-# Criar diretórios caso não existam
-RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
-
-# Definir permissões corretas
-RUN chown -R laraveluser:laraveluser storage bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
-
 # Configurar diretório de trabalho
 WORKDIR /var/www/html
 
 # Copiar arquivos do projeto
 COPY . .
 
-# Alterar dono dos arquivos para evitar problemas de permissão
-RUN chown -R laraveluser:laraveluser /var/www/html
+# Criar e copiar o arquivo .env
+RUN cp .env.example .env
+
+# Definir permissões corretas
+RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R laraveluser:laraveluser storage bootstrap/cache
 
 # Mudar para o usuário sem privilégios
 USER laraveluser
 
+# Gerar chave da aplicação
+RUN php artisan key:generate
+
 # Instalar dependências do Laravel
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-plugins=false
 
 # Voltar para usuário root apenas para configuração final
 USER root
@@ -52,5 +52,9 @@ RUN chown -R www-data:www-data /var/www/html
 # Expor a porta padrão do Apache
 EXPOSE 80
 
+# Copiar o script de entrada para executar as Seeders
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Comando de inicialização do contêiner
-CMD ["apache2-foreground"]
+CMD ["/entrypoint.sh"]
