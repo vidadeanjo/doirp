@@ -30,28 +30,29 @@ COPY . .
 # Criar diretórios caso não existam
 RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
 
-# Alterar dono dos arquivos para evitar problemas de permissão
-RUN chown -R laraveluser:laraveluser /var/www/html
-
 # Definir permissões corretamente
+RUN chown -R laraveluser:laraveluser /var/www/html
 RUN chmod -R 775 storage bootstrap/cache
+
+# Copiar arquivo .env caso não exista (ESSENCIAL para evitar erros)
+RUN cp .env.example .env
 
 # Mudar para o usuário sem privilégios
 USER laraveluser
 
-# ✅ Instalar dependências do Laravel **SEM a opção --no-plugins=false**
+# ✅ Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Copiar arquivo .env caso não exista
-RUN cp .env.example .env
+# 📌 Se der erro em package:discover, forçar um dump-autoload
+RUN composer dump-autoload
 
 # Gerar chave da aplicação
 RUN php artisan key:generate
 
-# Voltar para usuário root apenas para configuração final
+# Voltar para usuário root para configuração final
 USER root
 
-# Configurar Apache
+# Definir permissões do Laravel
 RUN chown -R www-data:www-data /var/www/html
 
 # Expor a porta padrão do Apache
