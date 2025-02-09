@@ -1,0 +1,178 @@
+:root {
+    --primary-priod-color: #ff4136;
+    --secondary-color: #333333;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.bg-primary-priod {
+    background-color: var(--primary-priod-color) !important;
+}
+
+.bg-secondary-priod {
+    background-color: var(--secondary-color) !important;
+}
+
+.text-primary-priod {
+    color: var(--primary-priod-color) !important;
+}
+
+.btn-primary-priod {
+    background-color: var(--primary-priod-color) !important;
+    border-color: var(--primary-priod-color) !important;
+    color:white !important;
+}
+
+.btn-primary-priod:hover {
+    background-color: #e60000 !important;
+    border-color: #e60000 !important;
+}
+
+.btn-outline-primary-priod {
+    color: var(--primary-priod-color) !important;
+    border-color: var(--primary-priod-color) !important;
+}
+
+.btn-outline-primary-priod:hover {
+    background-color: var(--primary-priod-color) !important;
+    border-color: var(--primary-priod-color) !important;
+    color: white !important;
+}
+
+.card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.hero {
+    background: linear-gradient(rgba(255, 65, 54, 0.8), rgba(255, 65, 54, 0.8));
+    background-position: right bottom !important;
+    height: 450px;
+    background-size: cover;
+    background-position:right center !important;
+    transition: background-image 1s ease-in-out;
+   
+    text-align: center;
+    bottom: auto;
+}
+.h-link{
+    color: var(--primary-priod-color) !important;
+    
+}
+
+.h-link:hover, .active{
+    color: var(--primary-priod-color) !important;
+    font-weight: bold;
+    transition: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
+
+}
+
+.navbar-toggler:hover{
+    background-color: #ff4136;
+}
+
+.logoroda{
+    opacity: 0.5 !important;
+    transition: ease-in-out;
+}
+
+/* Telas pequenas - Celulares (sm) */
+@media (max-width: 576px) {
+    /* Coloque aqui os estilos para telas pequenas */
+    #logo_on_slide{
+        height: 100px !important;
+        transition: 0.7s;
+    }
+}
+
+@media (min-width: 576px) {
+    /* Coloque aqui os estilos para telas pequenas */
+    #logo_on_slide{
+        height: 100px !important;
+        transition: 0.7s;
+    }
+}
+
+/* Telas médias - Tablets (md) */
+@media (min-width: 768px) and (max-width: 991px) {
+    /* Coloque aqui os estilos para telas médias */
+    #logo_on_slide{
+        height: 100px !important;
+        transition: 0.7s;
+    }
+}
+
+/* Telas grandes - Desktop (lg) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    /* Coloque aqui os estilos para telas grandes */
+    #logo_on_slide{
+        height: 120px !important;
+        transition: 0.7s;
+    }
+}
+
+/* Telas muito grandes - Desktop grande (xl) */
+@media (min-width: 1200px) {
+    /* Coloque aqui os estilos para telas muito grandes */
+    #logo_on_slide{
+        height: 120px !important;
+        transition: 0.7s;
+    }
+}
+
+
+.principal-main{
+
+    min-height: 100dvh;
+}
+
+
+    /* Estilo para a mensagem */
+    .flash-message {
+       
+        background-color: #fa4f46b7;/* Coloração neutra */
+        color: #333;
+        border: 1px solid #ff4136;
+        border-radius: 5px;
+        height: 30px;
+        padding-left: 10px;
+        padding: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        animation: fade-out 2.5s ease-in-out forwards;
+    }
+
+    /* Animação para desaparecer */
+    @keyframes fade-out {
+        0% { opacity: 1; }
+        10% { opacity: 1; }
+        11% { opacity: 1; }
+        12% { opacity: 1; }
+        13% { opacity: 1; }
+        14% { opacity: 1; }
+        15% { opacity: 1; }
+        16% { opacity: 1; }
+        17% { opacity: 1; }
+        18% { opacity: 1; }
+        19% { opacity: 1; }
+        20% { opacity: 1; }
+        30% { opacity: 1; }
+        40% { opacity: 0.8; }
+        50% { opacity: 0.6; }
+        60% { opacity: 0.4; }
+        80% { opacity: 0.2; }
+        100% { opacity: 0; }
+    }
+
+    .description {
+        white-space: nowrap;        /* Impede que o texto quebre para a linha seguinte */
+        overflow: hidden;           /* Esconde o texto que ultrapassa o limite */
+        text-overflow: ellipsis;    /* Adiciona "..." ao final do texto truncado */
+        max-width: 200px;           /* Define o limite de largura, ajustando conforme necessário */
+      }

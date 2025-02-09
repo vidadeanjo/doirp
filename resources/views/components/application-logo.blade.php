@@ -1,0 +1,1 @@
+<img src="{{ asset('build/assets/imgs/LOGO PRIOD.png')}}"  class="w-16 h-16">
