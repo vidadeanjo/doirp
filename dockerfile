@@ -1,7 +1,7 @@
-# Usando uma imagem oficial do PHP com Apache
+# Usar imagem oficial do PHP com Apache
 FROM php:8.2-apache
 
-# Atualizar pacotes e instalar extensões PHP necessárias
+# Instalar extensões e pacotes necessários
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer globalmente
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configurar diretório de trabalho
+# Definir diretório de trabalho
 WORKDIR /var/www/html
 
 # Copiar arquivos do projeto
@@ -30,16 +30,16 @@ RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# Instalar dependências do Laravel
+# ✅ Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Aplicar permissões finais
+# Definir permissões corretas para evitar problemas de cache
 RUN chown -R www-data:www-data /var/www/html
 
-# Expor a porta padrão do Apache
+# Expor porta do Apache
 EXPOSE 80
 
-# Copiar e configurar o script de entrada
+# Copiar script de entrada e dar permissão de execução
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
