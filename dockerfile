@@ -17,8 +17,15 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Criar diretórios caso não existam
+RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
+
+# Definir permissões corretas
+RUN chmod -R 775 storage bootstrap/cache
+
 # Configurar diretório de trabalho
 WORKDIR /var/www/html
+
 
 # Copiar arquivos do projeto
 COPY . .
