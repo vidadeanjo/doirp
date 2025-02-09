@@ -39,13 +39,13 @@ RUN chmod -R 775 storage bootstrap/cache
 # Mudar para o usuário sem privilégios
 USER laraveluser
 
-# Instalar dependências do Laravel antes de rodar qualquer comando do Artisan
-RUN composer install --no-dev --optimize-autoloader --no-plugins=false
+# ✅ Instalar dependências do Laravel **SEM a opção --no-plugins=false**
+RUN composer install --no-dev --optimize-autoloader
 
 # Copiar arquivo .env caso não exista
 RUN cp .env.example .env
 
-# Gerar chave da aplicação (agora depois do Composer)
+# Gerar chave da aplicação
 RUN php artisan key:generate
 
 # Voltar para usuário root apenas para configuração final
