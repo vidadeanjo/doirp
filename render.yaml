@@ -8,15 +8,15 @@ services:
       - key: APP_KEY
         sync: false
       - key: DB_CONNECTION
-        value: pgsql
+        value: mysql
       - key: DB_HOST
-        value: dpg-cuke8r3tq21c73e62nug-a
+        value: mysql.railway.internal
       - key: DB_PORT
-        value: 5432
+        value: 3306
       - key: DB_DATABASE
-        value: dbpriod
+        value: priod
       - key: DB_USERNAME
-        value: dbpriod_user
+        value: root
       - key: DB_PASSWORD
         sync: false
     plan: free

@@ -3,7 +3,7 @@ FROM php:8.2-cli
 
 # Instalar extensões PHP necessárias
 RUN apt-get update && apt-get install -y \
-    zip unzip git curl libpng-dev libjpeg-dev libfreetype6-dev libzip-dev \
+    zip unzip git curl libpng-dev libjpeg-dev libfreetype6-dev libzip-dev netcat \
     && docker-php-ext-install gd pdo pdo_mysql mbstring bcmath zip
 
 # Instalar Composer globalmente
@@ -28,8 +28,19 @@ USER root
 # Definir permissões corretas
 RUN chown -R www-data:www-data /var/www/html
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# ✅ Aguardar banco de dados antes de executar os comandos do Laravel
+RUN while ! nc -z $DB_HOST 3306; do echo "Aguardando o banco de dados..."; sleep 3; done
 
+# ✅ Cache de configuração e rotas
+RUN php artisan config:cache && php artisan route:cache
+
+# ✅ Executar migrações
+RUN php artisan migrate --force || true
+
+# Adicionar entrypoint customizado
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+# Definir o comando padrão para rodar a aplicação
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
