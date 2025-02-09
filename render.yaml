@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: meu-site-laravel
+    env: php
+    repo: https://github.com/seu-usuario/seu-repo
+    buildCommand: "./render-build.sh"
+    startCommand: "php artisan serve --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromService: meu-banco
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        fromService: meu-banco
+      - key: DB_USERNAME
+        fromService: meu-banco
+      - key: DB_PASSWORD
+        fromService: meu-banco
+
+  - type: pserv
+    name: meu-banco
+    env: postgres
+    plan: free
