@@ -5,13 +5,14 @@ mkdir -p /var/www/html/storage/framework/{cache,sessions,views} /var/www/html/bo
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Limpar caches do Laravel para evitar erros
-php artisan cache:clear || true
-php artisan config:clear || true
-php artisan view:clear || true
+# Rodar comandos Artisan necessários para evitar erros
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan config:cache
 
-# Rodar migrações e seeders (se necessário)
-php artisan migrate --seed --force || true
+# Executar migrações automaticamente
+php artisan migrate --force
 
 # Iniciar o Apache
 apache2-foreground

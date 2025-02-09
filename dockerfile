@@ -16,12 +16,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo pdo_mysql pdo_pgsql mbstring bcmath xml zip
 
-# Instalar Composer
+# Instalar Composer globalmente
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Criar usuário sem privilégios de root
-RUN groupadd -g 1000 laraveluser && \
-    useradd -u 1000 -g laraveluser -m laraveluser
 
 # Configurar diretório de trabalho
 WORKDIR /var/www/html
@@ -29,27 +25,15 @@ WORKDIR /var/www/html
 # Copiar arquivos do projeto
 COPY . .
 
-# Criar diretórios necessários antes do composer install
-RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
-RUN chown -R laraveluser:laraveluser storage bootstrap/cache
-
-# Copiar arquivo .env caso não exista
-RUN cp .env.example .env || true
-
-# Mudar para o usuário sem privilégios para rodar o Composer
-USER laraveluser
+# ✅ Criar diretórios necessários antes da instalação do Composer
+RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
 # Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Gerar chave da aplicação (se necessário)
-RUN php artisan key:generate || true
-
-# Voltar para usuário root para configuração final
-USER root
-
-# Definir permissões finais para Laravel
+# Aplicar permissões finais
 RUN chown -R www-data:www-data /var/www/html
 
 # Expor a porta padrão do Apache
