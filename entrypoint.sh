@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# Criar diretórios de cache necessários para evitar erro de Laravel
-mkdir -p /var/www/html/storage/framework/{cache,sessions,views} /var/www/html/bootstrap/cache
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Criar diretórios de cache necessários
+mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
 
 # Limpar e recriar os caches do Laravel para evitar erros
 php artisan config:clear
@@ -14,5 +14,5 @@ php artisan config:cache
 # Rodar migrações automaticamente
 php artisan migrate --force
 
-# Iniciar Apache
-apache2-foreground
+# Iniciar o servidor Laravel
+php artisan serve --host=0.0.0.0 --port=8000

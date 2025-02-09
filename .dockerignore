@@ -1,6 +1,6 @@
 node_modules
 vendor
-storage
+#storage
 .env
 .DS_Store
 .git
