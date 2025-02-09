@@ -17,24 +17,34 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Criar usuário sem privilégios de root
+RUN groupadd -g 1000 laraveluser && \
+    useradd -u 1000 -g laraveluser -m laraveluser
+
 # Criar diretórios caso não existam
 RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
 
 # Definir permissões corretas
+RUN chown -R laraveluser:laraveluser storage bootstrap/cache
 RUN chmod -R 775 storage bootstrap/cache
 
 # Configurar diretório de trabalho
 WORKDIR /var/www/html
 
-
 # Copiar arquivos do projeto
 COPY . .
 
-# Definir permissões para o Laravel
-RUN chmod -R 775 storage bootstrap/cache
+# Alterar dono dos arquivos para evitar problemas de permissão
+RUN chown -R laraveluser:laraveluser /var/www/html
+
+# Mudar para o usuário sem privilégios
+USER laraveluser
 
 # Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader
+
+# Voltar para usuário root apenas para configuração final
+USER root
 
 # Configurar Apache
 RUN chown -R www-data:www-data /var/www/html
