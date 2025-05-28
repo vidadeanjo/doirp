@@ -2,66 +2,44 @@
 
 namespace App\Livewire;
 
-use App\Models\Curso;
+use App\Models\curso;
 use Livewire\Component;
-use Illuminate\Support\Str;
 
 class Cursos extends Component
 {
     public $cursos;
-    public $searchTerm = '';
+    public $searchTerm = ''; // Campo para o termo de busca
 
-    public function mount()
-    {
-        $this->refreshCursos();
-    }
-
-    public function updatedSearchTerm()
-    {
-        $this->refreshCursos();
-    }
-
+    
+       
+   
     public function render()
     {
+          // Carrega os cursos ao iniciar
+          $this->refreshCursos();
         return view('livewire.cursos');
     }
-
+   
+    // Atualiza a lista de cursos com base no termo de busca
     public function refreshCursos()
     {
-        $termo = $this->normalize($this->searchTerm);
-
-        if (empty($termo)) {
-            $this->cursos = Curso::all();
-            return;
-        }
-
-        $this->cursos = Curso::all()->filter(function ($curso) use ($termo) {
-            return Str::of($this->normalize($curso->nome))->contains($termo);
-        });
+        $this->cursos = Curso::when($this->searchTerm, function ($query) {
+            $query->where('nome', 'like', '%' . $this->searchTerm . '%');
+                })->get();
     }
-
-    private function normalize($string)
-    {
-        $string = strtolower($string);
-        $map = [
-            'á'=>'a','à'=>'a','ã'=>'a','â'=>'a',
-            'é'=>'e','ê'=>'e',
-            'í'=>'i',
-            'ó'=>'o','ô'=>'o','õ'=>'o',
-            'ú'=>'u','ü'=>'u',
-            'ç'=>'c'
-        ];
-        return strtr($string, $map);
-    }
-
+    
     public function detalhesCurso($id)
     {
+        // Validar e buscar o curso
         $curso = Curso::find($id);
+
         if (!$curso) {
             session()->flash('error', 'Curso não encontrado.');
             return;
         }
+        
 
-        return redirect()->route('curso-detalhes', ['id' => $curso->id]);
+        // Redirecionar para a página de detalhes
+        return redirect()->route('curso-detalhe', ['id' => $id]);
     }
 }
