@@ -17,4 +17,19 @@ class InicioIn extends Component
     {
         return view('livewire.inicio-in');
     }
+
+     public function detalhesCurso($id)
+    {
+        // Validar e buscar o curso
+        $curso = Curso::find($id);
+
+        if (!$curso) {
+            session()->flash('error', 'Curso não encontrado.');
+            return;
+        }
+        
+
+        // Redirecionar para a página de detalhes
+        return redirect()->route('curso-detalhe', ['id' => $id]);
+    }
 }

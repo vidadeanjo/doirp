@@ -2,44 +2,47 @@
 
 namespace App\Livewire;
 
-use App\Models\curso;
+use App\Models\Curso;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 class Cursos extends Component
 {
     public $cursos;
-    public $searchTerm = ''; // Campo para o termo de busca
+    public $searchTerm = '';
 
-    
-       
-   
     public function render()
     {
-          // Carrega os cursos ao iniciar
-          $this->refreshCursos();
+        $this->refreshCursos();
         return view('livewire.cursos');
     }
-   
-    // Atualiza a lista de cursos com base no termo de busca
+
     public function refreshCursos()
     {
-        $this->cursos = Curso::when($this->searchTerm, function ($query) {
-            $query->where('nome', 'like', '%' . $this->searchTerm . '%');
-                })->get();
+        $search = $this->normalize($this->searchTerm);
+
+        $this->cursos = Curso::when($search, function ($query) use ($search) {
+            $query->whereRaw("LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(nome,
+                'á','a'),'à','a'),'ã','a'),'â','a'),'é','e'),'ê','e'),'í','i'),'ó','o'),'ô','o'),'ú','u')) LIKE ?", ["%$search%"]);
+        })->get();
     }
-    
+
+    private function normalize($string)
+    {
+        $string = strtolower($string);
+        $unwanted = ['á'=>'a','à'=>'a','ã'=>'a','â'=>'a','é'=>'e','ê'=>'e','í'=>'i','ó'=>'o','ô'=>'o','ú'=>'u','ç'=>'c'];
+        return strtr($string, $unwanted);
+    }
+
     public function detalhesCurso($id)
     {
-        // Validar e buscar o curso
         $curso = Curso::find($id);
 
         if (!$curso) {
             session()->flash('error', 'Curso não encontrado.');
             return;
         }
-        
 
-        // Redirecionar para a página de detalhes
-        return redirect()->route('curso-detalhe', ['id' => $id]);
+        return redirect()->route('curso-detalhes', ['id' => $curso->id]);
     }
 }

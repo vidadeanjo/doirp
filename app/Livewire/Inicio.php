@@ -10,4 +10,6 @@ class Inicio extends Component
     {
         return view('livewire.inicio');
     }
+
+    
 }

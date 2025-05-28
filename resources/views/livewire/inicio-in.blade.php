@@ -126,10 +126,10 @@
                             <h5 class="card-title">{{ $curso->nome }}</h5>
                             <p class="card-text"><i class="bi bi-clock"></i> Duração: {{ $curso->duracao }}</p>
                             <p class="card-text"><i class="bi bi-class"></i> Próxima Turma: {{ $curso->turma ?? 'Não definido.'}}</p>
-                            <a href="{{route('curso-detalhes')}}"class="btn btn-outline-primary-priod">Saiba Mais</a>
+                            <p wire:click="detalhesCurso({{ $curso->id }})" class="btn btn-outline-primary-priod">Saiba Mais</p>
                         </div>
                     </div>
-                </div>
+                </div> 
                 @endforeach
                
             </div>
