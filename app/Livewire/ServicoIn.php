@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\categoria;
+use App\Models\Categoria;
 use Livewire\Component;
 
 class ServicoIn extends Component
@@ -11,11 +11,11 @@ class ServicoIn extends Component
 
     public function mount(){
          // Recupera categorias com seus serviços associados
-         $categorias = categoria::with('servicos')->get();
+         $categorias = Categoria::with('servicos')->get();
          $this-> categorias = $categorias;
 
     }
-    public function render()
+     public function render()
     {
         return view('livewire.servico-in');
     }
