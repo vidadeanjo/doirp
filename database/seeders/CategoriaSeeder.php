@@ -16,13 +16,14 @@ class CategoriaSeeder extends Seeder
     {
 
             // Desativar verificação de chaves estrangeiras
-    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::statement('SET CONSTRAINTS ALL DEFERRED'); //COMANDO POSTGRES
+
 
     // Truncar a tabela
     DB::table('categorias')->truncate();
 
     // Reativar verificação de chaves estrangeiras
-    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    //DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         //categoria::truncate();
 

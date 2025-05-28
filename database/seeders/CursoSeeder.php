@@ -15,9 +15,9 @@ class CursoSeeder extends Seeder
     {
         // Truncate the table before seeding
       // Truncate the table before seeding
-      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+     DB::statement('SET CONSTRAINTS ALL DEFERRED'); //comando portgres
       DB::table('cursos')->truncate();
-      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+      //DB::statement('SET FOREIGN_KEY_CHECKS=1;'); comando mysql
 
       $cursos = [
           [

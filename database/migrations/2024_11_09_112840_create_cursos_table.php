@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nome');
             $table->text('descricao')->nullable();
             $table->text('conteudo')->nullable();
-            $table->text('duracao'); 
+            $table->text('duracao');
              $table->boolean('destaque')->default(false);
             $table->decimal('preco', 8, 2);
             $table->string('modalidade');
