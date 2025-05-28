@@ -11,33 +11,52 @@ class Cursos extends Component
     public $cursos;
     public $searchTerm = '';
 
-    public function render()
+    public function mount()
     {
         $this->refreshCursos();
+    }
+
+    public function updatedSearchTerm()
+    {
+        $this->refreshCursos();
+    }
+
+    public function render()
+    {
         return view('livewire.cursos');
     }
 
     public function refreshCursos()
     {
-        $search = $this->normalize($this->searchTerm);
+        $termo = $this->normalize($this->searchTerm);
 
-        $this->cursos = Curso::when($search, function ($query) use ($search) {
-            $query->whereRaw("LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(nome,
-                'á','a'),'à','a'),'ã','a'),'â','a'),'é','e'),'ê','e'),'í','i'),'ó','o'),'ô','o'),'ú','u')) LIKE ?", ["%$search%"]);
-        })->get();
+        if (empty($termo)) {
+            $this->cursos = Curso::all();
+            return;
+        }
+
+        $this->cursos = Curso::all()->filter(function ($curso) use ($termo) {
+            return Str::of($this->normalize($curso->nome))->contains($termo);
+        });
     }
 
     private function normalize($string)
     {
         $string = strtolower($string);
-        $unwanted = ['á'=>'a','à'=>'a','ã'=>'a','â'=>'a','é'=>'e','ê'=>'e','í'=>'i','ó'=>'o','ô'=>'o','ú'=>'u','ç'=>'c'];
-        return strtr($string, $unwanted);
+        $map = [
+            'á'=>'a','à'=>'a','ã'=>'a','â'=>'a',
+            'é'=>'e','ê'=>'e',
+            'í'=>'i',
+            'ó'=>'o','ô'=>'o','õ'=>'o',
+            'ú'=>'u','ü'=>'u',
+            'ç'=>'c'
+        ];
+        return strtr($string, $map);
     }
 
     public function detalhesCurso($id)
     {
         $curso = Curso::find($id);
-
         if (!$curso) {
             session()->flash('error', 'Curso não encontrado.');
             return;
