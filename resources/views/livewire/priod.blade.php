@@ -17,8 +17,10 @@
        <!-- CSS do AOS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css">
 
-    
+               
+
     @livewireStyles
+    
 </head>
 <body>
 
@@ -154,6 +156,36 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar-container');
+    const sidebarToggle = document.querySelector('[data-bs-target="#sidebarCollapse"]');
+    
+    // Controle do menu mobile
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+        });
+    }
+    
+    // Fechar menu ao clicar em um item (mobile)
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+    });
+    
+    // Ajustar layout quando redimensionar
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+            sidebar.classList.remove('show');
+        }
+    });
+});
+</script>
     
     <script src={{ asset('build/assets/js/jquery.min.js')}}></script>
     <script src={{ asset('build/assets/js/jquery-migrate-3.0.1.min.js')}}></script>

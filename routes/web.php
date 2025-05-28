@@ -1,6 +1,8 @@
 <?php
 
-
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,9 +15,15 @@ use Illuminate\Support\Facades\Route;
         Route::view('/servicos/categorias', 'livewire.capsules.categorias-capsule')->name('admin-servicos-categorias');
         Route::view('/priod-info', 'livewire.priod-info')->name('admin-priod-info');
 
-    });
+            // Rotas para mensagens
+        Route::get('/mensagens', [\App\Http\Controllers\Admin\MensagemController::class, 'index'])
+            ->name('admin-mensagens');
+        Route::get('/mensagens/{id}', [\App\Http\Controllers\Admin\MensagemController::class, 'show'])
+            ->name('admin-mensagem-show');
+        Route::delete('/mensagens/{id}', [\App\Http\Controllers\Admin\MensagemController::class, 'destroy'])
+            ->name('admin-mensagem-destroy');
 
-Route::middleware('guest')->group( function () {
+    });
 
     Route::prefix('cursos')->group(function () {
         Route::view('/', 'livewire.capsules.cursos-capsule')->name('cursos');
@@ -23,11 +31,12 @@ Route::middleware('guest')->group( function () {
         Route::view('/detalhes', 'livewire.curso-detalhes')->name('curso-detalhes');
     });
     Route::view('/', 'livewire.inicio')->name('inicio');
-    Route::view('/servicos', 'livewire.servicos')->name('servicos');
+    Route::view('/servicos', 'Servicos')->name('servicos');
     Route::view('/sobre o priod', 'livewire.sobre')->name('sobre');
     Route::view('/contacto', 'livewire.contacto')->name('contacto');
-});
 
+Route::post('/enviar-mensagem', [\App\Http\Controllers\ContactoController::class, 'enviarMensagem'])
+    ->name('enviar-mensagem');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -36,5 +45,14 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+
+  Route::post('/logout', function (Request $request) {
+    Auth::guard('web')->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
+    
 
 require __DIR__.'/auth.php';

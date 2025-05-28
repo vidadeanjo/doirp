@@ -176,3 +176,125 @@ body {
         text-overflow: ellipsis;    /* Adiciona "..." ao final do texto truncado */
         max-width: 200px;           /* Define o limite de largura, ajustando conforme necessário */
       }
+
+/* Mensagens não lidas */
+.table-primary {
+    background-color: rgba(255, 65, 54, 0.1) !important;
+}
+
+/* Badge de contagem */
+.badge.bg-primary-priod {
+    font-size: 0.7rem;
+    vertical-align: top;
+}
+
+/* Card de detalhes da mensagem */
+.card-header.bg-primary-priod {
+    padding: 1rem;
+}
+
+/* Botão de responder */
+.btn-primary-priod .bi-reply {
+    margin-right: 5px;
+}
+
+/* Área de mensagem */
+.bg-light.rounded {
+    min-height: 150px;
+    white-space: pre-wrap;
+}
+
+/* Estilos para a página de contato */
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 65, 54, 0.1);
+    border-radius: 50%;
+}
+
+.contact-info-item {
+    transition: all 0.3s ease;
+}
+
+.contact-info-item:hover {
+    transform: translateX(5px);
+}
+
+/* Formulário */
+.form-control:focus {
+    border-color: var(--primary-priod-color);
+    box-shadow: 0 0 0 0.25rem rgba(255, 65, 54, 0.25);
+}
+
+/* Mapa */
+.card-footer.bg-primary-priod {
+    font-weight: 500;
+}
+
+/* Redes sociais */
+.btn-outline-primary-priod.rounded-circle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Menu Offcanvas */
+.offcanvas {
+    background-color: #f8f9fa;
+}
+
+@media (min-width: 768px) {
+    .offcanvas {
+        transform: none !important;
+        visibility: visible !important;
+        position: static;
+        background: none;
+        border: none;
+    }
+    .offcanvas-body {
+        padding: 0;
+    }
+}
+
+/* Navbar */
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Menu ativo */
+.nav-link.active {
+    font-weight: bold;
+    position: relative;
+}
+
+.nav-link.active:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 2px;
+    background-color: var(--primary-priod-color);
+}
