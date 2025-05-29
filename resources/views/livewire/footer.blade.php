@@ -1,4 +1,4 @@
-<footer class="bg-secondary-priod text-white py-4 footer">
+<footer class="bg-secondary-priod text-white py-4 footer" id="footer">
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-3 mb-md-0">

@@ -290,3 +290,8 @@ body {
     height: 2px;
     background-color: var(--primary-priod-color);
 }
+
+#footer {
+    background: #333333!important;
+   
+}

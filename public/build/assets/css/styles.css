@@ -1,6 +1,6 @@
 :root {
     --primary-priod-color: #ff4136;
-    --secondary-color: #333333;
+    --secondary-color: #333333 !important;
 }
 
 body {
@@ -297,4 +297,9 @@ body {
     width: 50%;
     height: 2px;
     background-color: var(--primary-priod-color);
+}
+
+#footer {
+    background: #333333!important;
+   
 }
