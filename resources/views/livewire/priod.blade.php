@@ -14,6 +14,9 @@
    
     <link rel="icon" href="https://ctpe-priod.up.railway.app/build/assets/imgs/LOGO PRIOD.png'" type="image/png">
     <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/styles.css">
+    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/animate.css">
+    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/bootstrap.min.css">
        <!-- CSS do AOS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css">
 
