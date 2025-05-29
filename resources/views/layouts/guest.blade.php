@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/animate.css">
     <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/app-DEZZvcA.css">
+    <script src="https://cdn.tailwindcss.com"></script>
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
