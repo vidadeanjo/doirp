@@ -49,14 +49,14 @@ class AdminServicos extends Component
     {
         $this->validate([
             'nome' => 'required|string|max:255',
-            'descricao' => 'required|string|max:1000',
-            'categoria_id' => 'required|exists:categorias,id',
+            'descricao' => 'nullable|string|max:1000',
+            'categoria_id' => 'nullable|exists:categorias,id',
         ]);
 
         Servico::create([
             'nome' => $this->nome,
             'descricao' => $this->descricao,
-            'categoria_id' => $this->categoria_id,
+            'categoria_id' => $this->categoria_id ?: null,
         ]);
 
         session()->flash('message', 'Serviço criado com sucesso!');
@@ -78,15 +78,15 @@ class AdminServicos extends Component
     {
         $this->validate([
             'nome' => 'required|string|max:255',
-            'descricao' => 'required|string|max:1000',
-            'categoria_id' => 'required|exists:categorias,id',
+            'descricao' => 'nullable|string|max:1000',
+            'categoria_id' => 'nullable|exists:categorias,id',
         ]);
 
         $servico = Servico::findOrFail($this->servicoId);
         $servico->update([
             'nome' => $this->nome,
             'descricao' => $this->descricao,
-            'categoria_id' => $this->categoria_id,
+            'categoria_id' => $this->categoria_id ?: null,
         ]);
 
         session()->flash('message', 'Serviço atualizado com sucesso!');
