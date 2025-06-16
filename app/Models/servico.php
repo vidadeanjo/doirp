@@ -7,14 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Servico extends Model
 {
-    /** @use HasFactory<\Database\Factories\ServicoFactory> */
     use HasFactory;
 
-    protected $fillable = [ 'nome', 'descricao','categoria_id'];
+    protected $fillable = [
+        'nome',
+        'descricao',
+        'categoria_id'
+    ];
 
-    // Relacionamento com Categoria
+    // Relacionamento: Um serviço pertence a uma categoria
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class);
+        return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 }

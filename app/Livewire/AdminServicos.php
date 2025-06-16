@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\categoria;
-use App\Models\servico;
+use App\Models\Categoria;
+use App\Models\Servico;
 use Livewire\Component;
 
 class AdminServicos extends Component
@@ -15,7 +15,7 @@ class AdminServicos extends Component
 
     public function mount()
     {
-        $this->categorias = categoria::all();
+        $this->categorias = Categoria::all();
         $this->refreshServicos();
     }
 
@@ -26,7 +26,7 @@ class AdminServicos extends Component
 
     public function refreshServicos()
     {
-        $this->servicos = servico::with('categoria')
+        $this->servicos = Servico::with('categoria')
             ->when($this->searchTerm, function ($query) {
                 $query->where('nome', 'like', '%' . $this->searchTerm . '%')
                       ->orWhereHas('categoria', function ($subQuery) {
@@ -49,8 +49,8 @@ class AdminServicos extends Component
     {
         $this->validate([
             'nome' => 'required|string|max:255',
-            'descricao' => 'required|string|max:255',
-            'categoria_id' => 'nullable|exists:categorias,id',
+            'descricao' => 'required|string|max:1000',
+            'categoria_id' => 'required|exists:categorias,id',
         ]);
 
         Servico::create([
@@ -62,8 +62,6 @@ class AdminServicos extends Component
         session()->flash('message', 'Serviço criado com sucesso!');
         $this->resetForm();
         $this->refreshServicos();
-        redirect(route('admin-servicos'));
-
     }
 
     public function editServico($id)
@@ -80,8 +78,8 @@ class AdminServicos extends Component
     {
         $this->validate([
             'nome' => 'required|string|max:255',
-            'descricao' => 'required|string|max:255',
-            'categoria_id' => 'nullable|exists:categorias,id',
+            'descricao' => 'required|string|max:1000',
+            'categoria_id' => 'required|exists:categorias,id',
         ]);
 
         $servico = Servico::findOrFail($this->servicoId);
@@ -94,12 +92,11 @@ class AdminServicos extends Component
         session()->flash('message', 'Serviço atualizado com sucesso!');
         $this->resetForm();
         $this->refreshServicos();
-        redirect(route('admin-servicos'));
     }
 
     public function deleteServico($id)
     {
-        $servico = servico::findOrFail($id);
+        $servico = Servico::findOrFail($id);
         $servico->delete();
 
         session()->flash('message', 'Serviço deletado com sucesso!');
