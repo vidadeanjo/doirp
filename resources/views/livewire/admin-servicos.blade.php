@@ -92,7 +92,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="serviceCategory" class="form-label">Categoria</label>
-                            <select class="form-select" id="serviceCategory" wire:model="categoria_id" required>
+                            <select class="form-select" id="serviceCategory" wire:model="categoriaId" required>
                                 <option value="">Selecione uma categoria</option>
                                 @foreach ($categorias as $categoria)
                                     <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>

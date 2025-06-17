@@ -8,8 +8,12 @@ use Livewire\Component;
 
 class AdminServicos extends Component
 {
-    public $servicos, $categorias;
-    public $nome, $descricao, $categoria_id, $servicoId;
+    public $servicos;
+    public  $categorias;
+    public $nome;
+    public $descricao;
+    public $categoriaId;
+    public $servicoId;
     public $isEditMode = false;
     public $searchTerm = '';
 
@@ -40,7 +44,7 @@ class AdminServicos extends Component
     {
         $this->nome = '';
         $this->descricao = '';
-        $this->categoria_id = '';
+        $this->categoriaId = '';
         $this->servicoId = null;
         $this->isEditMode = false;
     }
@@ -50,13 +54,13 @@ class AdminServicos extends Component
         $this->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string|max:1000',
-            'categoria_id' => 'nullable|exists:categorias,id',
+            'categoriaId' => 'nullable|exists:categorias,id',
         ]);
 
         Servico::create([
             'nome' => $this->nome,
             'descricao' => $this->descricao,
-            'categoria_id' => $this->categoria_id ?: null,
+            'categoriaId' => $this->categoriaId ?: null,
         ]);
 
         session()->flash('message', 'Serviço criado com sucesso!');
@@ -70,7 +74,7 @@ class AdminServicos extends Component
         $this->servicoId = $servico->id;
         $this->nome = $servico->nome;
         $this->descricao = $servico->descricao;
-        $this->categoria_id = $servico->categoria_id;
+        $this->categoriaId = $servico->categoriaId;
         $this->isEditMode = true;
     }
 
@@ -79,14 +83,14 @@ class AdminServicos extends Component
         $this->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string|max:1000',
-            'categoria_id' => 'nullable|exists:categorias,id',
+            'categoriaId' => 'nullable|exists:categorias,id',
         ]);
 
         $servico = Servico::findOrFail($this->servicoId);
         $servico->update([
             'nome' => $this->nome,
             'descricao' => $this->descricao,
-            'categoria_id' => $this->categoria_id ?: null,
+            'categoriaId' => $this->categoriaId ?: null,
         ]);
 
         session()->flash('message', 'Serviço atualizado com sucesso!');

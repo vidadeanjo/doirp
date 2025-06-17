@@ -19,7 +19,7 @@ class AdminCursos extends Component
             // Carrega os cursos ao iniciar
             $this->updateCursos();
         }
-           // Função para filtrar os cursos
+           // Função para filtrar os cursos 
         public function updatedSearch()
         {
             $this->updateCursos();
