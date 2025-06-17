@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Route;
         Route::view('/servicos/categorias', 'livewire.capsules.categorias-capsule')->name('admin-servicos-categorias');
         Route::view('/priod-info', 'livewire.priod-info')->name('admin-priod-info');
 
+
+         // Nova rota de teste
+    Route::view('/serviconews', 'livewire.admin-serviconews')->name('admin-serviconews');
+    
+// Nova rota de teste pública
+Route::view('/serviconews', 'livewire.serviconew-public')->name('serviconews-public');
             // Rotas para mensagens
         Route::get('/mensagens', [\App\Http\Controllers\Admin\MensagemController::class, 'index'])
             ->name('admin-mensagens');

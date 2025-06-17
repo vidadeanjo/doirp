@@ -15,8 +15,25 @@
                     <li class="nav-item">
                         <a class="nav-link h-link {{ request()->is('cursos*') ? 'active' : '' }}" href="{{route('cursos')}}">Cursos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link h-link {{ request()->is('servicos*') ? 'active' : '' }}" href="{{route('servicos')}}">Serviços</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link h-link dropdown-toggle {{ request()->is('servicos*') || request()->is('serviconews*') ? 'active' : '' }}" 
+                           href="#" id="servicosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Serviços
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="servicosDropdown">
+                            <li>
+                                <a class="dropdown-item {{ request()->is('servicos') && !request()->is('serviconews*') ? 'active' : '' }}" href="{{route('servicos')}}">
+                                    <i class="bi bi-gear me-2"></i>Serviços Oficiais
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item {{ request()->is('serviconews*') ? 'active' : '' }}" href="{{route('serviconews-public')}}">
+                                    <i class="bi bi-gear-fill me-2 text-warning"></i>Serviços Teste
+                                    <small class="badge bg-warning text-dark ms-1">TESTE</small>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link h-link {{ request()->is('sobre*') ? 'active' : '' }}" href="{{route('sobre')}}">Sobre</a>
@@ -27,12 +44,36 @@
                 </ul>
 
                 @auth
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-link text-decoration-none text-primary">
-                        <i class="bi bi-box-arrow-right"></i> Sair
+                <div class="dropdown">
+                    <button class="btn btn-link text-decoration-none text-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i>{{ Auth::user()->name }}
                     </button>
-                </form>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admin') }}">
+                                <i class="bi bi-speedometer2 me-2"></i>Painel Admin
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('profile') }}">
+                                <i class="bi bi-person me-2"></i>Perfil
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Sair
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-link text-decoration-none text-primary">
+                    <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                </a>
                 @endauth
             </div>
         </div>
