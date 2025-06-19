@@ -20,3 +20,4 @@ class ServicoIn extends Component
         return view('livewire.servico-in');
     }
 }
+    

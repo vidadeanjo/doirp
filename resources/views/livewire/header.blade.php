@@ -15,25 +15,15 @@
                     <li class="nav-item">
                         <a class="nav-link h-link {{ request()->is('cursos*') ? 'active' : '' }}" href="{{route('cursos')}}">Cursos</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link h-link dropdown-toggle {{ request()->is('servicos*') || request()->is('serviconews*') ? 'active' : '' }}" 
-                           href="#" id="servicosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <li class="nav-item">
+                        <a class="nav-link h-link {{ request()->is('servicos') && !request()->is('serviconews*') ? 'active' : '' }}" href="{{route('servicos')}}">
                             Serviços
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="servicosDropdown">
-                            <li>
-                                <a class="dropdown-item {{ request()->is('servicos') && !request()->is('serviconews*') ? 'active' : '' }}" href="{{route('servicos')}}">
-                                    <i class="bi bi-gear me-2"></i>Serviços Oficiais
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item {{ request()->is('serviconews*') ? 'active' : '' }}" href="{{route('serviconews-public')}}">
-                                    <i class="bi bi-gear-fill me-2 text-warning"></i>Serviços Teste
-                                    <small class="badge bg-warning text-dark ms-1">TESTE</small>
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link h-link {{ request()->is('serviconews*') ? 'active' : '' }}" href="{{route('serviconews-public')}}">
+                                    Serviços Teste
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link h-link {{ request()->is('sobre*') ? 'active' : '' }}" href="{{route('sobre')}}">Sobre</a>
