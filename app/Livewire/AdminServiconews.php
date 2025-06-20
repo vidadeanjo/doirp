@@ -8,8 +8,6 @@ use Livewire\Component;
 class AdminServiconews extends Component
 {
     public $serviconews;
-    public $nome, $descricao, $categoria, $serviconewId;
-    public $isEditMode = false;
     public $searchTerm = '';
 
     public function mount()
@@ -24,83 +22,97 @@ class AdminServiconews extends Component
 
     public function refreshServiconews()
     {
-        $this->serviconews = Serviconew::query()
-            ->when($this->searchTerm, function ($query) {
-                $query->where('nome', 'like', '%' . $this->searchTerm . '%')
-                      ->orWhere('categoria', 'like', '%' . $this->searchTerm . '%');
-            })
-            ->get();
+        $query = Serviconew::query();
+        
+        if (!empty($this->searchTerm)) {
+            $searchTerm = '%' . $this->searchTerm . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('nome', 'ilike', $searchTerm)
+                  ->orWhere('categoria', 'ilike', $searchTerm)
+                  ->orWhere('descricao', 'ilike', $searchTerm);
+            });
+        }
+        
+        $this->serviconews = $query->orderBy('created_at', 'desc')->get();
     }
 
-    public function resetForm()
+    public function createServiconew($nome, $descricao = null, $categoria = null)
     {
-        $this->nome = '';
-        $this->descricao = '';
-        $this->categoria = '';
-        $this->serviconewId = null;
-        $this->isEditMode = false;
+        try {
+            $this->validate([
+                'nome' => 'required|string|max:255',
+            ], [
+                'nome.required' => 'O nome é obrigatório',
+                'nome.max' => 'O nome não pode ter mais de 255 caracteres',
+            ], [
+                'nome' => $nome,
+            ]);
+
+            Serviconew::create([
+                'nome' => trim($nome),
+                'descricao' => $descricao ? trim($descricao) : null,
+                'categoria' => $categoria ? trim($categoria) : null,
+            ]);
+
+            session()->flash('message', 'Serviço criado com sucesso!');
+            $this->refreshServiconews();
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao criar serviço: ' . $e->getMessage());
+        }
     }
 
-    public function createServiconew()
+    public function updateServiconew($id, $nome, $descricao = null, $categoria = null)
     {
-        $this->validate([
-            'nome' => 'required|string|max:255',
-            'descricao' => 'nullable|string|max:1000',
-            'categoria' => 'nullable|string|max:255',
-        ]);
+        try {
+            $this->validate([
+                'nome' => 'required|string|max:255',
+            ], [
+                'nome.required' => 'O nome é obrigatório',
+                'nome.max' => 'O nome não pode ter mais de 255 caracteres',
+            ], [
+                'nome' => $nome,
+            ]);
 
-        Serviconew::create([
-            'nome' => $this->nome,
-            'descricao' => $this->descricao,
-            'categoria' => $this->categoria,
-        ]);
+            $serviconew = Serviconew::findOrFail($id);
+            $serviconew->update([
+                'nome' => trim($nome),
+                'descricao' => $descricao ? trim($descricao) : null,
+                'categoria' => $categoria ? trim($categoria) : null,
+            ]);
 
-        session()->flash('message', 'Serviço Novo criado com sucesso!');
-        $this->resetForm();
-        $this->refreshServiconews();
-    }
-
-    public function editServiconew($id)
-    {
-        $serviconew = Serviconew::findOrFail($id);
-        $this->serviconewId = $serviconew->id;
-        $this->nome = $serviconew->nome;
-        $this->descricao = $serviconew->descricao;
-        $this->categoria = $serviconew->categoria;
-        $this->isEditMode = true;
-    }
-
-    public function updateServiconew()
-    {
-        $this->validate([
-            'nome' => 'required|string|max:255',
-            'descricao' => 'nullable|string|max:1000',
-            'categoria' => 'nullable|string|max:255',
-        ]);
-
-        $serviconew = Serviconew::findOrFail($this->serviconewId);
-        $serviconew->update([
-            'nome' => $this->nome,
-            'descricao' => $this->descricao,
-            'categoria' => $this->categoria,
-        ]);
-
-        session()->flash('message', 'Serviço Novo atualizado com sucesso!');
-        $this->resetForm();
-        $this->refreshServiconews();
+            session()->flash('message', 'Serviço atualizado com sucesso!');
+            $this->refreshServiconews();
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao atualizar serviço: ' . $e->getMessage());
+        }
     }
 
     public function deleteServiconew($id)
     {
-        $serviconew = Serviconew::findOrFail($id);
-        $serviconew->delete();
-
-        session()->flash('message', 'Serviço Novo deletado com sucesso!');
-        $this->refreshServiconews();
+        try {
+            $serviconew = Serviconew::find($id);
+            
+            if (!$serviconew) {
+                session()->flash('error', 'Serviço não encontrado.');
+                $this->refreshServiconews();
+                return;
+            }
+            
+            $serviconew->delete();
+            session()->flash('message', 'Serviço deletado com sucesso!');
+            $this->refreshServiconews();
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao deletar serviço: ' . $e->getMessage());
+        }
     }
 
     public function render()
     {
-        return view('livewire.admin-serviconews');
+        return view('livewire.admin-serviconews')
+            ->extends('livewire.priod')
+            ->section('content');
     }
 }

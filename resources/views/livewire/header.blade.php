@@ -16,13 +16,8 @@
                         <a class="nav-link h-link {{ request()->is('cursos*') ? 'active' : '' }}" href="{{route('cursos')}}">Cursos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link h-link {{ request()->is('servicos') && !request()->is('serviconews*') ? 'active' : '' }}" href="{{route('servicos')}}">
-                            Serviços
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link h-link {{ request()->is('serviconews*') ? 'active' : '' }}" href="{{route('serviconews-public')}}">
-                                    Serviços Teste
+                            Serviços
                         </a>
                     </li>
                     <li class="nav-item">

@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::view('/', 'livewire.admin-panel')->name('admin');
     Route::view('/cursos', 'livewire.add-curso')->name('admin-cursos');
-    Route::view('/servicos', 'livewire.add-servico')->name('admin-servicos');
+    //Route::view('/servicos', 'livewire.add-servico')->name('admin-servicos');
     Route::view('/servicos/categorias', 'livewire.capsules.categorias-capsule')->name('admin-servicos-categorias');
     Route::view('/priod-info', 'livewire.priod-info')->name('admin-priod-info');
 
     // Nova rota de teste - usando get ao invés de view
-    Route::get('/serviconews', function () {
+    Route::get('/servicos', function () {
         return view('adminserviconews');
     })->name('admin-serviconews');
 
@@ -33,10 +33,10 @@ Route::prefix('cursos')->group(function () {
 });
 
 Route::view('/', 'livewire.inicio')->name('inicio');
-Route::view('/servicos', 'Servicos')->name('servicos');
+//Route::view('/servicos', 'Servicos')->name('servicos');
 
 // Nova rota de teste pública - usando get ao invés de view
-Route::get('/serviconews', function () {
+Route::get('/servicos', function () {
     return view('serviconewpublic');
 })->name('serviconews-public');
 
