@@ -2,8 +2,8 @@
     <main>
         <section class="bg-primary-priod text-white py-5">
             <div class="container">
-                <h1 class="display-4 fw-bold">Serviços Novos (Teste)</h1>
-                <p class="fs-4">Teste sem relacionamentos</p>
+                <h1 class="display-4 fw-bold">Nossos Serviços</h1>
+                <p class="fs-4">Soluções profissionais integradas para sua empresa</p>
             </div>
         </section>
 
