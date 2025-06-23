@@ -1,5 +1,5 @@
 <header class="bg-light text-primary sticky-top">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="{{route('inicio')}}">
                 <img src="{{ asset('build/assets/imgs/logo.png')}}" alt="PRIOD Logo" height="40">
@@ -55,6 +55,10 @@
                         </li>
                     </ul>
                 </div>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-link text-decoration-none text-primary">
+                    <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                </a>
                 @endauth
             </div>
         </div>
