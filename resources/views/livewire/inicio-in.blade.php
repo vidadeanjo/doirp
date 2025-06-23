@@ -10,10 +10,10 @@
                
                     <a href="{{route('cursos')}}" class="btn btn-light btn-lg " style="margin-right: 10px;">Ver Cursos</a>
               
-                    <a href="{{route('servicos')}}" class="btn btn-light btn-lg">Ver Serviços</a>
+                    <a href="{{route('serviconews-public')}}" class="btn btn-light btn-lg">Ver Serviços</a>
              
             </div>
-            
+             
         </div>
   </section>
   

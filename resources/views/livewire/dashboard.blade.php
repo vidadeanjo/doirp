@@ -16,13 +16,5 @@
             </div>
         </div>
     </div>
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Total de Categorias</h5>
-                <p class="card-text fs-2">{{$totalCategorias}}</p>
-            </div>
-        </div>
-    </div>
      
 </div>

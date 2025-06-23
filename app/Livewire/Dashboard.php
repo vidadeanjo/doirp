@@ -10,13 +10,11 @@ class Dashboard extends Component
     public $totalServicos, $totalCursos, $totalCategorias;
 
     public function mount(){
-        $totalServicos = DB::table('servicos')->count();
+        $totalServicos = DB::table('serviconews')->count();
         $totalCursos = DB::table('cursos')->count();
-        $totalCategorias = DB::table('categorias')->count();
 
         $this->totalServicos = $totalServicos;
         $this->totalCursos = $totalCursos;
-        $this->totalCategorias = $totalCategorias;
 
     }
     public function render()
