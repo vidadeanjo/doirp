@@ -127,12 +127,17 @@
                                         <strong>Nossa Localização - Caponte, Lobito</strong>
                                     </div>
                                     <div>
-                                        <button id="findMeBtn" class="btn btn-light btn-sm">
-                                            <i class="bi bi-crosshair me-1"></i> Encontrar-me
-                                        </button>
-                                        <button id="getDirectionsBtn" class="btn btn-outline-light btn-sm" style="display: none;">
-                                            <i class="bi bi-signpost-2 me-1"></i> Como Chegar
-                                        </button>
+                                        <div>
+                                            <button id="findMeBtn" class="btn btn-light btn-sm">
+                                                <i class="bi bi-crosshair me-1"></i> Encontrar-me
+                                            </button>
+                                            <button id="refreshLocationBtn" class="btn btn-outline-light btn-sm" style="display: none;">
+                                                <i class="bi bi-arrow-clockwise me-1"></i> Atualizar
+                                            </button>
+                                            <button id="getDirectionsBtn" class="btn btn-outline-light btn-sm" style="display: none;">
+                                                <i class="bi bi-signpost-2 me-1"></i> Como Chegar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -223,6 +228,11 @@
                 window.open(url, '_blank');
             }
         }
+
+        // Adicionar no event listener principal
+        if (e.target.id === 'refreshLocationBtn' || e.target.closest('#refreshLocationBtn')) {
+            findUserLocation();
+        }
     });
 
     function findUserLocation() {
@@ -232,14 +242,31 @@
         btn.innerHTML = '<i class="bi bi-arrow-clockwise spin me-1"></i> Localizando...';
         btn.disabled = true;
         
+        // Limpar localização anterior
+        userLocation = null;
+        if (userMarker) {
+            map.removeLayer(userMarker);
+            userMarker = null;
+        }
+        
+        document.getElementById('locationInfo').innerHTML = 
+            '<i class="bi bi-arrow-clockwise spin me-1"></i> Obtendo sua localização atual...';
+        
         if (navigator.geolocation) {
+            // Primeiro, tentar com alta precisão e sem cache
             navigator.geolocation.getCurrentPosition(
                 function(position) {
+                    console.log('Localização obtida:', position.coords);
                     userLocation = [position.coords.latitude, position.coords.longitude];
                     showUserLocation(userLocation);
                     calculateDistance();
                     btn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Localizado!';
                     document.getElementById('getDirectionsBtn').style.display = 'inline-block';
+                    document.getElementById('refreshLocationBtn').style.display = 'inline-block';
+                    
+                    // Mostrar informações de precisão
+                    const accuracy = position.coords.accuracy;
+                    console.log(`Precisão: ${accuracy} metros`);
                     
                     setTimeout(() => {
                         btn.innerHTML = originalText;
@@ -247,29 +274,20 @@
                     }, 2000);
                 },
                 function(error) {
-                    let errorMsg = 'Erro ao obter localização';
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMsg = 'Permissão negada para acessar localização';
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMsg = 'Localização não disponível';
-                            break;
-                        case error.TIMEOUT:
-                            errorMsg = 'Tempo limite excedido';
-                            break;
+                    console.error('Erro de geolocalização:', error);
+                    
+                    // Se falhar, tentar novamente com configurações menos restritivas
+                    if (error.code === error.TIMEOUT || error.code === error.POSITION_UNAVAILABLE) {
+                        console.log('Tentando novamente com configurações alternativas...');
+                        tryAlternativeGeolocation(btn, originalText);
+                    } else {
+                        handleGeolocationError(error, btn, originalText);
                     }
-                    
-                    document.getElementById('locationInfo').innerHTML = 
-                        `<i class="bi bi-exclamation-triangle text-warning me-1"></i> ${errorMsg}`;
-                    
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
                 },
                 {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 60000
+                    enableHighAccuracy: true,    // Força GPS/alta precisão
+                    timeout: 15000,              // Aumenta timeout para 15s
+                    maximumAge: 0                // NUNCA usar cache - sempre nova localização
                 }
             );
         } else {
@@ -280,13 +298,92 @@
         }
     }
 
+    function tryAlternativeGeolocation(btn, originalText) {
+        console.log('Tentativa alternativa de geolocalização...');
+        
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                console.log('Localização alternativa obtida:', position.coords);
+                userLocation = [position.coords.latitude, position.coords.longitude];
+                showUserLocation(userLocation);
+                calculateDistance();
+                btn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Localizado!';
+                document.getElementById('getDirectionsBtn').style.display = 'inline-block';
+                document.getElementById('refreshLocationBtn').style.display = 'inline-block';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 2000);
+            },
+            function(error) {
+                handleGeolocationError(error, btn, originalText);
+            },
+            {
+                enableHighAccuracy: false,   // Permite localização menos precisa
+                timeout: 10000,              // Timeout menor
+                maximumAge: 0                // Ainda sem cache
+            }
+        );
+    }
+
+    function handleGeolocationError(error, btn, originalText) {
+        let errorMsg = 'Erro ao obter localização';
+        let suggestion = '';
+        
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                errorMsg = 'Permissão negada para acessar localização';
+                suggestion = 'Clique no ícone de localização na barra do navegador e permita o acesso.';
+                break;
+            case error.POSITION_UNAVAILABLE:
+                errorMsg = 'Localização não disponível';
+                suggestion = 'Verifique se o GPS está ativado e tente novamente.';
+                break;
+            case error.TIMEOUT:
+                errorMsg = 'Tempo limite excedido';
+                suggestion = 'Tente novamente. Pode demorar alguns segundos para obter sua localização.';
+                break;
+        }
+        
+        document.getElementById('locationInfo').innerHTML = `
+            <div class="alert alert-warning p-2 mb-0">
+                <i class="bi bi-exclamation-triangle me-1"></i> 
+                <strong>${errorMsg}</strong><br>
+                <small>${suggestion}</small>
+                <br>
+                <button class="btn btn-sm btn-outline-warning mt-2" onclick="clearLocationAndRetry()">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Tentar Novamente
+                </button>
+            </div>
+        `;
+        
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+
+    // Função para limpar cache e tentar novamente
+    function clearLocationAndRetry() {
+        console.log('Limpando cache de localização e tentando novamente...');
+        
+        // Limpar qualquer cache local
+        if ('geolocation' in navigator) {
+            // Forçar nova requisição
+            findUserLocation();
+        }
+    }
+
     function showUserLocation(coords) {
         if (!map) return;
         
+        console.log('Mostrando localização:', coords);
+        
+        // Remover marcador anterior se existir
         if (userMarker) {
             map.removeLayer(userMarker);
         }
         
+        // Adicionar marcador do usuário
         userMarker = L.marker(coords, {
             icon: L.icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
@@ -300,12 +397,15 @@
         .addTo(map)
         .bindPopup(`
             <div class="text-center">
-                <strong>📍 Sua Localização</strong><br>
+                <strong>📍 Sua Localização Atual</strong><br>
                 <small>Lat: ${coords[0].toFixed(6)}</small><br>
-                <small>Lng: ${coords[1].toFixed(6)}</small>
+                <small>Lng: ${coords[1].toFixed(6)}</small><br>
+                <small class="text-muted">Atualizado: ${new Date().toLocaleTimeString()}</small>
             </div>
-        `);
+        `)
+        .openPopup();
         
+        // Ajustar visualização para mostrar ambos os marcadores
         const group = new L.featureGroup([priodMarker, userMarker]);
         map.fitBounds(group.getBounds().pad(0.1));
     }

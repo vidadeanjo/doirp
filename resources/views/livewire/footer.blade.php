@@ -3,12 +3,12 @@
         <div class="row">
             <div class="col-md-3 mb-3 mb-md-0">
                 <h5>PRIOD</h5>
-                <p>Centro Técnico Profissional de Excelência</p>
+                <p >Centro Técnico Profissional de Excelência</p>
             </div>
             <div class="col-md-3 mb-3 mb-md-0">
                 <h5>Contato</h5>
                 <p><i class="bi bi-telephone"></i> {{$priod->whatsapp}} | {{$priod->contacto}}</p>
-                <p><i class="bi bi-envelope"></i> {{$priod->email}}</p>
+                <small style="font-size: 0.75rem;"><i class="bi bi-envelope"></i> {{$priod->email}}</small>
             </div>
             <div class="col-md-3 mb-3 mb-md-0 text-center">
                 <h5>Parceiros</h5>
