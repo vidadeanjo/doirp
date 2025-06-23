@@ -55,10 +55,7 @@
                         </li>
                     </ul>
                 </div>
-                @else
-                <a href="{{ route('login') }}" class="btn btn-link text-decoration-none text-primary">
-                    <i class="bi bi-box-arrow-in-right me-1"></i>Login
-                </a>
+            
                 @endauth
             </div>
         </div>
