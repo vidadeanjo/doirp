@@ -25,6 +25,7 @@
 @vite(['resources/css/styles.css', 'resources/js/app.js', ])
 
     @livewireStyles
+    @stack('styles')
     
 </head>
 <body>
@@ -40,6 +41,7 @@
     <livewire:footer />
 
     @livewireScripts
+    @stack('scripts')
 
     @php
         $images = [
