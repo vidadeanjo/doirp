@@ -13,55 +13,88 @@ class ServiconewSeeder extends Seeder
      */
     public function run(): void
     {
-        Serviconew::truncate();
+        // Usar delete() ao invés de truncate() para evitar problemas
+        Serviconew::query()->delete();
 
-        // Serviços de teste sem relacionamentos
+        // Serviços da categoria "Formação e Consultoria"
         Serviconew::create([
-            'nome' => 'Desenvolvimento Web Teste',
-            'descricao' => 'Criação de sites e aplicações web personalizadas para teste.',
-            'categoria' => 'Desenvolvimento'
+            'nome' => 'Capacitação de Funcionários',
+            'descricao' => 'Capacitação de funcionários na indústria em diversas áreas.',
+            'categoria' => 'Formação e Consultoria'
         ]);
 
         Serviconew::create([
-            'nome' => 'Consultoria em TI Teste',
-            'descricao' => 'Assessoria técnica em tecnologia da informação para teste.',
-            'categoria' => 'Consultoria'
+            'nome' => 'Formação ao Público',
+            'descricao' => 'Formação para o público em geral.',
+            'categoria' => 'Formação e Consultoria'
         ]);
 
         Serviconew::create([
-            'nome' => 'Manutenção de Sistemas Teste',
-            'descricao' => 'Suporte e manutenção de sistemas existentes para teste.',
-            'categoria' => 'Suporte'
+            'nome' => 'Inovação Tecnológica',
+            'descricao' => 'Inovação tecnológica e assessoria na indústria.',
+            'categoria' => 'Formação e Consultoria'
         ]);
 
         Serviconew::create([
-            'nome' => 'Treinamento Corporativo Teste',
-            'descricao' => 'Capacitação de equipes em tecnologias modernas para teste.',
-            'categoria' => 'Formação'
+            'nome' => 'Criação de Sites',
+            'descricao' => 'Criação de sites (Básicos, Intermédios e Personalizados).',
+            'categoria' => 'Formação e Consultoria'
         ]);
 
         Serviconew::create([
-            'nome' => 'Análise de Dados Teste',
-            'descricao' => 'Processamento e análise de grandes volumes de dados para teste.',
-            'categoria' => 'Analytics'
+            'nome' => 'Alojamento de Emails Profissionais',
+            'descricao' => 'Serviço de hospedagem de emails profissionais.',
+            'categoria' => 'Formação e Consultoria'
+        ]);
+
+        // Serviços da categoria "Desenvolvimento de Softwares"
+        Serviconew::create([
+            'nome' => 'Softwares Personalizados',
+            'descricao' => 'Softwares para diversos objetivos sociais.',
+            'categoria' => 'Desenvolvimento de Softwares'
         ]);
 
         Serviconew::create([
-            'nome' => 'Segurança Digital Teste',
-            'descricao' => 'Implementação de soluções de segurança cibernética para teste.',
-            'categoria' => 'Segurança'
+            'nome' => 'Sistema de Gestão Escolar',
+            'descricao' => 'Colégios, creches e escolas normais.',
+            'categoria' => 'Desenvolvimento de Softwares'
         ]);
 
         Serviconew::create([
-            'nome' => 'Cloud Computing Teste',
-            'descricao' => 'Migração e gestão de infraestrutura em nuvem para teste.',
-            'categoria' => 'Cloud'
+            'nome' => 'Sistema de Gestão de Centros de Formação',
+            'descricao' => 'Gestão de centros de formação profissional.',
+            'categoria' => 'Desenvolvimento de Softwares'
         ]);
 
         Serviconew::create([
-            'nome' => 'Mobile Development Teste',
-            'descricao' => 'Desenvolvimento de aplicações móveis nativas e híbridas para teste.',
-            'categoria' => 'Mobile'
+            'nome' => 'Sistema de Gestão Comercial',
+            'descricao' => 'Faturação e controle de vendas.',
+            'categoria' => 'Desenvolvimento de Softwares'
+        ]);
+
+        Serviconew::create([
+            'nome' => 'Sistema de Gestão Hospitalar',
+            'descricao' => 'Soluções para clínicas e consultórios médicos.',
+            'categoria' => 'Desenvolvimento de Softwares'
+        ]);
+
+        // Serviços da categoria "Manutenção e Network"
+        Serviconew::create([
+            'nome' => 'Instalação de Aplicativos',
+            'descricao' => 'Configuração de aplicativos para Windows.',
+            'categoria' => 'Manutenção e Network'
+        ]);
+
+        Serviconew::create([
+            'nome' => 'Instalação de Servidores',
+            'descricao' => 'Windows Server e Linux.',
+            'categoria' => 'Manutenção e Network'
+        ]);
+
+        Serviconew::create([
+            'nome' => 'Implementação de Redes Estruturadas',
+            'descricao' => 'Redes domésticas e empresariais.',
+            'categoria' => 'Manutenção e Network'
         ]);
     }
 }
