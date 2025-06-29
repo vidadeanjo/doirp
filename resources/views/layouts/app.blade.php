@@ -12,11 +12,11 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
             
-    <link rel="icon" href="https://ctpe-priod.up.railway.app/build/assets/imgs/LOGO PRIOD.png'" type="image/png">
-    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/styles.css">
-    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/animate.css">
-    <link rel="stylesheet" href="https://ctpe-priod.up.railway.app/build/assets/css/bootstrap.min.css">
+    <link rel="icon" href="https://priod-production.up.railway.app/build/assets/imgs/LOGO PRIOD.png'" type="image/png">
+    <link rel="stylesheet" href="https://priod-production.up.railway.app/build/assets/css/styles.css">
+    <link rel="stylesheet" href="https://priod-production.up.railway.app/build/assets/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://priod-production.up.railway.app/build/assets/css/animate.css">
+    <link rel="stylesheet" href="https://priod-production.up.railway.app/build/assets/css/bootstrap.min.css">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
