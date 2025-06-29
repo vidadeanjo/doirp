@@ -40,7 +40,7 @@
                         <li class="nav-item w-100 mb-1">
                         <a href="{{ route('admin-serviconews') }}" class="nav-link {{ request()->is('admin/serviconews*') ? 'active' : '' }} px-3 py-2 align-middle">
                             <i class="bi bi-gear me-2"></i>
-                            <span class="ms-1 d-none d-sm-inline">Serviços Teste</span>
+                            <span class="ms-1 d-none d-sm-inline">Serviços</span>
                         </a>
                         </li>
                         <li class="nav-item w-100 mb-1">

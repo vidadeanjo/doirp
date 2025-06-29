@@ -7,164 +7,144 @@ use Livewire\Component;
 
 class AdminCursos extends Component
 {
+    public $cursos;
+    public $search = '';
 
-    public $nome, $descricao, $conteudo, $duracao, $preco, $modalidade, $turma;
-    public $search = ''; // Variável para o input de pesquisa
-    public $cursoId; // Usado para identificar o curso a ser editado/deletado
-    public $editMode = false; // Alterna entre os modos de criação e edição
-    public $cursos; // Variável para listar todos os cursos
-    
-        public function mount()
-        {
-            // Carrega os cursos ao iniciar
-            $this->updateCursos();
+    public function mount()
+    {
+        $this->refreshCursos();
+    }
+
+    public function updatedSearch()
+    {
+        $this->refreshCursos();
+    }
+
+    public function refreshCursos()
+    {
+        $query = curso::query();
+        
+        if (!empty($this->search)) {
+            $searchTerm = '%' . $this->search . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('nome', 'like', $searchTerm)
+                  ->orWhere('descricao', 'like', $searchTerm)
+                  ->orWhere('modalidade', 'like', $searchTerm);
+            });
         }
-           // Função para filtrar os cursos 
-        public function updatedSearch()
-        {
-            $this->updateCursos();
+        
+        $this->cursos = $query->orderBy('created_at', 'desc')->get();
+    }
+
+    public function toggleDestaque($cursoId)
+    {
+        try {
+            $curso = curso::findOrFail($cursoId);
+            $curso->destaque = !$curso->destaque;
+            $curso->save();
+            
+            $this->refreshCursos();
+            session()->flash('message', 'Status de destaque atualizado com sucesso!');
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao atualizar destaque: ' . $e->getMessage());
         }
-        public function render()
-        {
-            return view('livewire.admin-cursos');
-        }
-         /**
-         * Lista os cursos
-         */
-       // Função auxiliar para atualizar a lista de cursos
-        public function updateCursos()
-        {
-            $this->cursos = curso::query()
-                ->where('nome', 'like', '%' . $this->search . '%')
-                ->orWhere('descricao', 'like', '%' . $this->search . '%')
-                ->get();
-        }
-     
-        public function toggleDestaque($cursoId)
-        {
-            $curso = curso::find($cursoId);
-    
-            if ($curso) {
-                $curso->destaque = !$curso->destaque; // Inverte o valor (true/false)
-                $curso->save();
+    }
+
+    public function createCurso($nome, $descricao = null, $conteudo = null, $duracao = null, $preco = null, $modalidade = null, $turma = null)
+    {
+        try {
+            // Validação manual para compatibilidade com JavaScript
+            if (empty($nome)) {
+                throw new \Exception('O nome do curso é obrigatório');
             }
-    
-            $this->cursos = curso::all(); // Atualiza a lista
-          //  redirect(route('admin'));
+            if (empty($duracao)) {
+                throw new \Exception('A duração é obrigatória');
+            }
+            if (empty($preco) || !is_numeric($preco)) {
+                throw new \Exception('O preço deve ser um valor numérico válido');
+            }
+            if (empty($modalidade)) {
+                throw new \Exception('A modalidade é obrigatória');
+            }
+
+            curso::create([
+                'nome' => trim($nome),
+                'descricao' => $descricao ? trim($descricao) : null,
+                'conteudo' => $conteudo ? trim($conteudo) : null,
+                'duracao' => trim($duracao),
+                'preco' => floatval($preco),
+                'modalidade' => $modalidade,
+                'turma' => $turma ?: null,
+                'destaque' => false
+            ]);
+
+            session()->flash('message', 'Curso criado com sucesso!');
+            $this->refreshCursos();
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao criar curso: ' . $e->getMessage());
         }
-        public function addcurso()
-    {
-        $this->validate([
-            'nome' => 'required|string|max:255',
-            'descricao' => 'nullable|string',
-            'conteudo' => 'nullable|string',
-            'duracao' => 'required|string|max:255',
-            'preco' => 'required|numeric|min:0',
-            'modalidade' => 'required|in:presencial,online,hibrido',
-            'turma' => 'nullable|date',
-        ]);
-    
-        curso::create([
-            'nome' => $this->nome,
-            'descricao' => $this->descricao,
-            'conteudo' => $this->conteudo,
-            'duracao' => $this->duracao,
-            'preco' => $this->preco,
-            'modalidade' => $this->modalidade,
-            'turma' => $this->turma,
-        ]);
-        session()->flash('message', 'Curso criado com sucesso!');
-        $this->resetForm();
-        $this->updateCursos();
-          // Redireciona explicitamente para a rota atual
-    //return redirect()->route(request()->route()->getName());
-    redirect(route('admin-cursos'));
     }
 
-    /**
-     * Prepara o formulário para edição
-     */
-    public function editCurso($id)
+    public function updateCurso($id, $nome, $descricao = null, $conteudo = null, $duracao = null, $preco = null, $modalidade = null, $turma = null)
     {
-        $curso = curso::findOrFail($id);
+        try {
+            // Validação manual
+            if (empty($nome)) {
+                throw new \Exception('O nome do curso é obrigatório');
+            }
+            if (empty($duracao)) {
+                throw new \Exception('A duração é obrigatória');
+            }
+            if (empty($preco) || !is_numeric($preco)) {
+                throw new \Exception('O preço deve ser um valor numérico válido');
+            }
+            if (empty($modalidade)) {
+                throw new \Exception('A modalidade é obrigatória');
+            }
 
-        $this->cursoId = $curso->id;
-        $this->nome = $curso->nome;
-        $this->descricao = $curso->descricao;
-        $this->conteudo = $curso->conteudo;
-        $this->duracao = $curso->duracao;
-        $this->preco = $curso->preco;
-        $this->modalidade = $curso->modalidade;
-        $this->turma = $curso->turma;
+            $curso = curso::findOrFail($id);
+            $curso->update([
+                'nome' => trim($nome),
+                'descricao' => $descricao ? trim($descricao) : null,
+                'conteudo' => $conteudo ? trim($conteudo) : null,
+                'duracao' => trim($duracao),
+                'preco' => floatval($preco),
+                'modalidade' => $modalidade,
+                'turma' => $turma ?: null,
+            ]);
 
-        $this->editMode = true;
+            session()->flash('message', 'Curso atualizado com sucesso!');
+            $this->refreshCursos();
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao atualizar curso: ' . $e->getMessage());
+        }
     }
-    /**
-     * Atualiza um curso existente
-     */
-    public function updateCurso()
-    {
-        $this->validate([
-            'nome' => 'required|string|max:255',
-            'descricao' => 'nullable|string',
-            'conteudo' => 'nullable|string',
-            'duracao' => 'required|string|max:255',
-            'preco' => 'required|numeric|min:0',
-            'modalidade' => 'required|in:presencial,online,hibrido',
-            'turma'=>'nullable|date'
-        ]);
 
-        $curso = curso::findOrFail($this->cursoId);
-        $curso->update([
-            'nome' => $this->nome,
-            'descricao' => $this->descricao,
-            'conteudo' => $this->conteudo,
-            'duracao' => $this->duracao,
-            'preco' => $this->preco,
-            'modalidade' => $this->modalidade,
-            'turma'=> $this->turma,
-        ]);
-
-        session()->flash('message', 'Curso atualizado com sucesso!');
-        $this->resetForm();
-        $this->editMode = false;
-        $this->updateCursos();
-        redirect(route('admin-cursos'));
-    }
-    /**
-     * Deleta um curso
-     */
     public function deleteCurso($id)
     {
-        $curso = curso::findOrFail($id);
-        $curso->delete();
-
-        session()->flash('message', 'Curso deletado com sucesso!');
-        $this->updateCursos();
+        try {
+            $curso = curso::find($id);
+            
+            if (!$curso) {
+                session()->flash('error', 'Curso não encontrado.');
+                $this->refreshCursos();
+                return;
+            }
+            
+            $curso->delete();
+            session()->flash('message', 'Curso deletado com sucesso!');
+            $this->refreshCursos();
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao deletar curso: ' . $e->getMessage());
+        }
     }
-      /**
-     * Reseta o formulário
-     */
-    public function resetForm()
+
+    public function render()
     {
-        $this->nome = '';
-        $this->descricao = '';
-        $this->conteudo = '';
-        $this->duracao = '';
-        $this->preco = '';
-        $this->modalidade = '';
-        $this->turma = '';
-
-        $this->cursoId = null;
+        return view('livewire.admin-cursos');
     }
-      /**
-     * Cancela a edição
-     */
-    public function cancelEdit()
-    {
-        $this->resetForm();
-        $this->editMode = false;
-    }
-
-    
 }
