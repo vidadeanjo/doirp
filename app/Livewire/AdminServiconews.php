@@ -39,14 +39,10 @@ class AdminServiconews extends Component
     public function createServiconew($nome, $descricao = null, $categoria = null)
     {
         try {
-            $this->validate([
-                'nome' => 'required|string|max:255',
-            ], [
-                'nome.required' => 'O nome é obrigatório',
-                'nome.max' => 'O nome não pode ter mais de 255 caracteres',
-            ], [
-                'nome' => $nome,
-            ]);
+            // Validação manual para compatibilidade com JavaScript
+            if (empty($nome)) {
+                throw new \Exception('O nome do serviço é obrigatório');
+            }
 
             Serviconew::create([
                 'nome' => trim($nome),
@@ -65,14 +61,10 @@ class AdminServiconews extends Component
     public function updateServiconew($id, $nome, $descricao = null, $categoria = null)
     {
         try {
-            $this->validate([
-                'nome' => 'required|string|max:255',
-            ], [
-                'nome.required' => 'O nome é obrigatório',
-                'nome.max' => 'O nome não pode ter mais de 255 caracteres',
-            ], [
-                'nome' => $nome,
-            ]);
+            // Validação manual
+            if (empty($nome)) {
+                throw new \Exception('O nome do serviço é obrigatório');
+            }
 
             $serviconew = Serviconew::findOrFail($id);
             $serviconew->update([
@@ -111,8 +103,6 @@ class AdminServiconews extends Component
 
     public function render()
     {
-        return view('livewire.admin-serviconews')
-            ->extends('livewire.priod')
-            ->section('content');
+        return view('livewire.admin-serviconews');
     }
 }
